@@ -1,0 +1,28 @@
+﻿@page
+<style>
+#canvas {
+    width: 800px;
+    height: 500px;
+    outline: 1px solid #000;
+    background: #d79c50;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+</style>
+
+<canvas id="canvas"></canvas>
+
+
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/canvas.js"></script>
+
+
+<script src="~/js/Characters/Character.js"></script>
+<script src="~/js/Characters/NPC.js"></script>
+<script src="~/js/Characters/FriendlyNpc.js"></script>
+<script src="~/js/Characters/EnemyNpc.js"></script>
+
+<script src="~/js/Managers/ClientEngine.js"></script>
+<script src="~/js/Managers/NetworkManager.js"></script>

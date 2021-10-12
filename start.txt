@@ -1,0 +1,2 @@
+cd C:\Files\GitHub_Projects\SunkiojiDalis\SunkiojiDalis
+dotnet watch run -p SunkiojiDalis.csproj
