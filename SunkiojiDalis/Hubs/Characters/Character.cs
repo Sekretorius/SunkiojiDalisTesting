@@ -62,6 +62,11 @@ namespace SunkiojiDalis.Character
         public abstract void Attack();
         public abstract void Die();
 
+        public virtual void TakeDamage(float damage)
+        {
+            health -= damage;
+        }
+
         public override Dictionary<string, string> OnClientSideCreation()
         {
             Dictionary<string, string> characterData = new Dictionary<string, string>()
