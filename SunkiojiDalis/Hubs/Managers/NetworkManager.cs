@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using SunkiojiDalis.Engine;
-using SunkiojiDalis.Hubs;
+using SignalRWebPack.Engine;
+using SignalRWebPack.Hubs;
 
 
-namespace SunkiojiDalis.Network
+namespace SignalRWebPack.Network
 {
 	public class NetworkManager : ServerObject
 	{
@@ -265,12 +265,28 @@ namespace SunkiojiDalis.Network
 
     public abstract class NetworkObject : INetworkObject
     {
+        [JsonIgnore] private Vector2D position;
         [JsonIgnore] protected string guid = string.Empty;
         [JsonIgnore] protected bool createOnClient = true;
+        [JsonIgnore] protected Collider collider;
 
         [JsonIgnore] public NetworkManager NetworkManager { get; set; }
         [JsonIgnore] public virtual bool CreateOnClient { get => createOnClient; set => createOnClient = value; }
         [JsonIgnore] public virtual string GUID { get => guid; set => guid = value; }
+        [JsonIgnore] public Vector2D Position 
+        {
+            get { return position; }
+            set
+            {
+                if(value != null)
+                {
+                    if(collider != null) collider.Boundry.Position = value;
+                    position = value;
+                }
+            }
+        }
+
+        [JsonIgnore] public Collider Collider { get => collider; set => collider = value; }
         [JsonIgnore] public virtual bool IsDestroyed { get; set; }
         
         public NetworkObject()
@@ -281,7 +297,7 @@ namespace SunkiojiDalis.Network
         public virtual void Init() { }
         public virtual void Update() { }
         public virtual void Destroy() { }
-
+        public virtual void OnCollision(Collision collision) {}
         protected void SyncDataWithClients(string method, string dataJson)
         {
             NetworkManager.AddRequestToAllClients(new NetworkRequest(guid, method, dataJson));

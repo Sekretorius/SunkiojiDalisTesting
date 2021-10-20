@@ -1,0 +1,8 @@
+node_modules/
+snippets/*.js
+src/*.js
+bin/
+obj/
+wwwroot/css/main.*.css
+wwwroot/index.html
+wwwroot/main.*.js

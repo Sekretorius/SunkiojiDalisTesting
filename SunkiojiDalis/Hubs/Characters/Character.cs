@@ -1,10 +1,13 @@
+using Microsoft.AspNetCore.SignalR;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System;
 using Newtonsoft.Json;
-using SunkiojiDalis.Engine;
-using SunkiojiDalis.Network;
+using System.Linq;
+using SignalRWebPack.Engine;
+using SignalRWebPack.Network;
 
-namespace SunkiojiDalis.Character
+namespace SignalRWebPack.Character
 {
     [JsonObject(MemberSerialization.OptOut)]
     public abstract class Character : NetworkObject
@@ -13,9 +16,6 @@ namespace SunkiojiDalis.Character
         public float health;
         public string sprite;
         public int areaId;
-        public float x;
-        public float y;
-
         public int width;
         public int height;
         public int frameX;
@@ -31,8 +31,7 @@ namespace SunkiojiDalis.Character
             float health = 0, 
             string sprite = null, 
             int areaId = 0, 
-            int x = 0, 
-            int y = 0, 
+            Vector2D position = null,
             int width = 0, 
             int height = 0, 
             int frameX = 0, 
@@ -45,8 +44,7 @@ namespace SunkiojiDalis.Character
             this.sprite = sprite;
             this.areaId = areaId;
 
-            this.x = x;
-            this.y = y;
+            this.Position = position;
             this.speed = speed;
             this.moving = moving;
 
@@ -62,11 +60,6 @@ namespace SunkiojiDalis.Character
         public abstract void Attack();
         public abstract void Die();
 
-        public virtual void TakeDamage(float damage)
-        {
-            health -= damage;
-        }
-
         public override Dictionary<string, string> OnClientSideCreation()
         {
             Dictionary<string, string> characterData = new Dictionary<string, string>()
@@ -76,8 +69,8 @@ namespace SunkiojiDalis.Character
                 { "health", health.ToString() },
                 { "sprite", sprite },
                 { "areaId", areaId.ToString() },
-                { "x", x.ToString() },
-                { "y", y.ToString() },
+                { "x", Position.X.ToString() },
+                { "y", Position.Y.ToString() },
                 { "speed", speed.ToString() },
                 { "width", width.ToString() },
                 { "height", height.ToString() },

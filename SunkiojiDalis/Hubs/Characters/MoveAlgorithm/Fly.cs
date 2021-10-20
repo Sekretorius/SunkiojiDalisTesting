@@ -1,15 +1,17 @@
+using Microsoft.AspNetCore.SignalR;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System;
 using Newtonsoft.Json;
-using SunkiojiDalis.Engine;
+using System.Linq;
 
-namespace SunkiojiDalis.Character
+namespace SignalRWebPack.Character
 {
     public class Fly : MoveAlgorithm
     {
-        public override void Move(ref float x, ref float y, float speed)
+        public override Vector2D Move(Vector2D currentPosition, Vector2D targetPosition, float speed)
         {
-
+            return currentPosition;
         }
     }
 }

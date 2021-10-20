@@ -1,9 +1,12 @@
+using Microsoft.AspNetCore.SignalR;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System;
 using Newtonsoft.Json;
-using SunkiojiDalis.Engine;
+using System.Linq;
+using SignalRWebPack.Engine;
 
-namespace SunkiojiDalis.Character
+namespace SignalRWebPack.Character
 {
     public class FriendlyNpc : NPC
     {
@@ -12,18 +15,17 @@ namespace SunkiojiDalis.Character
             float health = 0, 
             string sprite = null, 
             int areaId = 0, 
-            int x = 0, 
-            int y = 0, 
+            Vector2D position = null, 
             int width = 0, 
             int height = 0, 
             int frameX = 0, 
             int frameY = 0, 
             int speed = 0,
-            bool moving = false) : base(name, health, sprite, areaId, x, y, width, height, frameX, frameY, speed, moving){}
+            bool moving = false) : base(name, health, sprite, areaId, position, width, height, frameX, frameY, speed, moving){}
 
         public override void Update()
         {
-            MoveAlgorithm.Move(ref x, ref y, speed);
+            //MoveAlgorithm.Move(ref x, ref y, speed);
             //SyncDataWithClients("SyncPosition", $"{{\"x\":\"{x}\", \"y\":\"{y}\"}}");
         }
 

@@ -6,16 +6,16 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using SunkiojiDalis.Hubs;
+using SignalRWebPack.Hubs;
 using Microsoft.AspNetCore.SignalR;
-using SunkiojiDalis.Engine;
+using SignalRWebPack.Engine;
 
-namespace SunkiojiDalis
+namespace SignalRWebPack
 {
     public class Program
     {
-        public static IHubContext<ChatHub> IHubContext;
-        
+		public static IHubContext<ChatHub> IHubContext;
+		
         public static void Main(string[] args)
         {
             IHost host = CreateHostBuilder(args).Build();

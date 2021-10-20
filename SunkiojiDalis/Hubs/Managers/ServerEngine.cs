@@ -6,13 +6,13 @@ using System.Linq;
 using System;
 using System.Diagnostics;
 using Newtonsoft.Json;
-using SunkiojiDalis.Hubs;
-using SunkiojiDalis.Network;
-using SunkiojiDalis;
-using SunkiojiDalis.Character;
-using SunkiojiDalis.Managers;
+using SignalRWebPack.Hubs;
+using SignalRWebPack.Network;
+using SignalRWebPack;
+using SignalRWebPack.Character;
+using SignalRWebPack.Managers;
 
-namespace SunkiojiDalis.Engine
+namespace SignalRWebPack.Engine
 {
     public class ServerEngine
     {
@@ -37,21 +37,35 @@ namespace SunkiojiDalis.Engine
             {
                 if(networkManager == null)
                 {
-                    NetworkManager = new NetworkManager();
+                    networkManager = new NetworkManager();
                 }
                 return networkManager;
             }
             set { if(networkManager == null) networkManager = value; }
         }
 
-        public float UpdateTime { get; set; } = 0;
+        private static CollisionManager collisionManager;
+        public static CollisionManager CollisionManager 
+        {
+            get
+            {
+                if(collisionManager == null)
+                {
+                    collisionManager = new CollisionManager();
+                }
+                return collisionManager;
+            }
+            set { if(collisionManager == null) collisionManager = value; }
+        }
+
+        public float UpdateTime { get; set; } = 0; // to do: optimize
         
         private readonly object ObjectProccessLock = new object();
 
         public List<IObject> waitingObjects = new List<IObject>();
         private Dictionary<string, IObject> instantiadedObjects = new Dictionary<string, IObject>();
 
-        private int updateDelay = 300;
+        private long updateDelay = 300;
         private Stopwatch stopWatch;
 
         public void Initialize()
@@ -62,15 +76,19 @@ namespace SunkiojiDalis.Engine
                 UpdateTask();
             });
 
+            collisionManager = new CollisionManager();
+            collisionManager.Init();
+
             networkManager = new NetworkManager();
             networkManager.SetHubContext(Program.IHubContext);
 
-            //NpcCreator npcCreator = new NpcCreator();
-            //NPC friendly = npcCreator.FactoryMethod(NpcType.Friendly);
-            //NPC enemy = npcCreator.FactoryMethod(NpcType.Enemy);
+
+            NpcCreator npcCreator = new NpcCreator();
+            NPC friendly = npcCreator.FactoryMethod(NpcType.Friendly);
+            NPC enemy = npcCreator.FactoryMethod(NpcType.Enemy);
             
-            //friendly.SetMoveAlgorithm(new Stand());
-            //enemy.SetMoveAlgorithm(new Walk());
+            friendly.SetMoveAlgorithm(new Stand());
+            enemy.SetMoveAlgorithm(new Walk());
         }
 
         //creates instance only on server
@@ -98,6 +116,10 @@ namespace SunkiojiDalis.Engine
             while (true)
             {
                 stopWatch = Stopwatch.StartNew();
+
+                //collision check
+                collisionManager.Update(); 
+
                 lock (ObjectProccessLock)
                 {
                     //start
@@ -116,6 +138,11 @@ namespace SunkiojiDalis.Engine
                             {
                                 NetworkManager.AddNewObjectToAllClients((NetworkObject)newObject);
                             }
+
+                            if(newObject.Collider != null)
+                            {
+                                collisionManager.RegisterCollider("0", newObject.Collider); //to add world id
+                            }
                         }
                     }
 
@@ -126,6 +153,10 @@ namespace SunkiojiDalis.Engine
                         IObject updatingObject = instantiadedObjects[updatingObjectId];
                         if(updatingObject.IsDestroyed)
                         {
+                            if(updatingObject.Collider != null)
+                            {
+                                collisionManager.UnRegisterCollider(updatingObject.Collider);
+                            }
                             updatingObject.Destroy();
                         }
                         else
@@ -137,7 +168,11 @@ namespace SunkiojiDalis.Engine
                     instantiadedObjects = proccessedObjects;
                 }
 
-                await Task.Delay(updateDelay);
+                if(stopWatch.ElapsedMilliseconds < updateDelay)
+                {
+                    await Task.Delay((int)(updateDelay - stopWatch.ElapsedMilliseconds));
+                }
+
                 stopWatch.Stop();
                 UpdateTime = (float)stopWatch.ElapsedMilliseconds / 1_000;
             }
@@ -167,15 +202,34 @@ namespace SunkiojiDalis.Engine
     {
         string GUID { get; set; }
         bool IsDestroyed { get; set; }
+        Vector2D Position { get; set; }
+        Collider Collider { get; set; }
         void Init();
         void Update();
         void Destroy();
+        void OnCollision(Collision collision);
     }
 
     public abstract class ServerObject : IObject
     {
+        private Vector2D position;
         protected string guid = string.Empty;
+        protected Collider collider;
         public virtual string GUID { get => guid; set => guid = value; }
+        public Vector2D Position 
+        {
+            get { return position; }
+            set
+            {
+                if(value != null)
+                {
+                    if(collider != null) collider.Boundry.Position = value;
+                    position = value;
+                }
+            }
+        }
+        public Collider Collider { get => collider; set => collider = value; }
+
         public ServerObject()
         {
             ServerEngine.Instance.CreateServerObject(this);
@@ -184,6 +238,7 @@ namespace SunkiojiDalis.Engine
         public virtual void Init(){}
         public virtual void Update(){}
         public virtual void Destroy(){}
+        public virtual void OnCollision(Collision collision) {}
     }
 
     public enum ServerObjectType

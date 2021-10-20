@@ -1,10 +1,11 @@
 ﻿
 using NUnit.Framework;
-using SunkiojiDalis.Character;
-using SunkiojiDalis.Engine;
+using SignalRWebPack.Character;
+using SignalRWebPack.Engine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,30 +29,31 @@ namespace Tests
         public void PositionTest()
         {
 
-            FriendlyNpc npc = new FriendlyNpc();
+            FriendlyNpc npc = new FriendlyNpc(position: new Vector2D(0, 0));
 
-            Assert.AreEqual(0, npc.x);
-            Assert.AreEqual(0, npc.y);
+            Assert.AreEqual(0, npc.Position.X);
+            Assert.AreEqual(0, npc.Position.Y);
+
         }
 
         [Test]
         public void MovementTest()
         {
 
-            FriendlyNpc npc = new FriendlyNpc(speed: 5);
+            EnemyNpc npc = new EnemyNpc(speed: 5, position: new Vector2D(0,0) );
             npc.SetMoveAlgorithm(new Walk());
 
-            float initialX = npc.x;
+            float initialX = npc.Position.X;
             ServerEngine.Instance.UpdateTime = 1;
             npc.Update();
 
-            Assert.AreEqual(npc.speed * ServerEngine.Instance.UpdateTime + initialX, npc.x);
+            Assert.AreEqual(npc.speed * ServerEngine.Instance.UpdateTime + initialX, npc.Position.X);
 
-            initialX = npc.x;
+            initialX = npc.Position.X;
             ServerEngine.Instance.UpdateTime = 1;
             npc.Update();
 
-            Assert.AreEqual(npc.speed * ServerEngine.Instance.UpdateTime + initialX, npc.x);
+            Assert.AreEqual(npc.speed * ServerEngine.Instance.UpdateTime + initialX, npc.Position.X);
         }
 
         [Test]
@@ -59,7 +61,7 @@ namespace Tests
         {
             float damage = 69;
             float health = 100;
-            EnemyNpc enemy = new EnemyNpc(health: health);
+            EnemyNpc enemy = new EnemyNpc(health: health, position: new Vector2D(0, 0));
             enemy.TakeDamage(damage);
 
             Assert.AreEqual(health-damage, enemy.health);
