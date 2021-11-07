@@ -9,8 +9,10 @@ using Newtonsoft.Json;
 using SignalRWebPack.Hubs;
 using SignalRWebPack.Network;
 using SignalRWebPack;
-using SignalRWebPack.Character;
+using SignalRWebPack.Characters;
 using SignalRWebPack.Managers;
+using SignalRWebPack.Hubs.Worlds;
+using SignalRWebPack.Facades;
 
 namespace SignalRWebPack.Engine
 {
@@ -83,12 +85,9 @@ namespace SignalRWebPack.Engine
             networkManager.SetHubContext(Program.IHubContext);
 
 
-            NpcCreator npcCreator = new NpcCreator();
-            NPC friendly = npcCreator.FactoryMethod(NpcType.Friendly);
-            NPC enemy = npcCreator.FactoryMethod(NpcType.Enemy);
-            
-            friendly.SetMoveAlgorithm(new Stand());
-            enemy.SetMoveAlgorithm(new Walk());
+            Facade servas = new Facade();
+            servas.Factory();
+            servas.Builder();
         }
 
         //creates instance only on server
@@ -136,7 +135,7 @@ namespace SignalRWebPack.Engine
 
                             if(newObject is NetworkObject)
                             {
-                                NetworkManager.AddNewObjectToAllClients((NetworkObject)newObject);
+                                NetworkManager.AddNewObjectToGroup(newObject.AreaId, (NetworkObject)newObject);
                             }
 
                             if(newObject.Collider != null)
@@ -157,6 +156,12 @@ namespace SignalRWebPack.Engine
                             {
                                 collisionManager.UnRegisterCollider(updatingObject.Collider);
                             }
+                            
+                            if(updatingObject is NetworkObject)
+                            {
+                                networkManager.RemoveNetworkObject((NetworkObject)updatingObject);
+                            }
+
                             updatingObject.Destroy();
                         }
                         else
@@ -204,6 +209,7 @@ namespace SignalRWebPack.Engine
         bool IsDestroyed { get; set; }
         Vector2D Position { get; set; }
         Collider Collider { get; set; }
+        public string AreaId {get; set; }
         void Init();
         void Update();
         void Destroy();
@@ -214,6 +220,7 @@ namespace SignalRWebPack.Engine
     {
         private Vector2D position;
         protected string guid = string.Empty;
+        public string AreaId {get; set; }
         protected Collider collider;
         public virtual string GUID { get => guid; set => guid = value; }
         public Vector2D Position 
@@ -247,6 +254,16 @@ namespace SignalRWebPack.Engine
         Character,
         NPC,
         EnemyNpc,
-        FriendlyNpc
+        FriendlyNpc,
+        PassableObstacle,
+        ImpassableObstacle,
+        CommonWeapon,
+        CommonArmor,
+        CommonPotion,
+        CommonFood,
+        LegendaryWeapon,
+        LegendaryArmor,
+        LegendaryPotion,
+        LegendaryFood
     }
 }

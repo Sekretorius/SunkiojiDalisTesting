@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using System.Linq;
 using SignalRWebPack.Engine;
 
-namespace SignalRWebPack.Character
+namespace SignalRWebPack.Characters
 {
     public class Walk : MoveAlgorithm
     {
@@ -20,6 +20,15 @@ namespace SignalRWebPack.Character
                 return targetPosition;
             }
             return currentPosition + direction.Normalize() * moveDistance;
+        }
+
+        public override MoveAlgorithm DeepCopy()
+        {
+            return (Walk)this.MemberwiseClone();
+        }
+        public override MoveAlgorithm ShallowCopy()
+        {
+            return (Walk)this.MemberwiseClone();
         }
     }
 }

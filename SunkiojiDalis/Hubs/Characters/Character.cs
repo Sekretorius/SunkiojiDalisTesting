@@ -7,7 +7,7 @@ using System.Linq;
 using SignalRWebPack.Engine;
 using SignalRWebPack.Network;
 
-namespace SignalRWebPack.Character
+namespace SignalRWebPack.Characters
 {
     [JsonObject(MemberSerialization.OptOut)]
     public abstract class Character : NetworkObject
@@ -15,14 +15,13 @@ namespace SignalRWebPack.Character
         public string name;
         public float health;
         public string sprite;
-        public int areaId;
         public int width;
         public int height;
         public int frameX;
         public int frameY;
-
-        public MoveAlgorithm MoveAlgorithm;
-        public AttackAlgorithm AttackAlgorithm;
+        public int areaId;
+        protected MoveAlgorithm moveAlgorithm; //must be private
+        protected AttackAlgorithm attackAlgorithm; //must be private
         public int speed;
         public bool moving;
 
@@ -30,20 +29,19 @@ namespace SignalRWebPack.Character
             string name = null, 
             float health = 0, 
             string sprite = null, 
-            int areaId = 0, 
             Vector2D position = null,
             int width = 0, 
             int height = 0, 
             int frameX = 0, 
-            int frameY = 0, 
+            int frameY = 0,
+            string areaId = "",
             int speed = 0, 
             bool moving = false) : base()
         {
             this.name = name;
             this.health = health;
             this.sprite = sprite;
-            this.areaId = areaId;
-
+            this.AreaId = areaId;
             this.Position = position;
             this.speed = speed;
             this.moving = moving;
@@ -54,8 +52,22 @@ namespace SignalRWebPack.Character
             this.frameY = frameY;
         }
 
-        public abstract AttackAlgorithm GetAttackAlgorithm();
-        public abstract MoveAlgorithm GetMoveAlgorithm();
+        public virtual AttackAlgorithm GetAttackAlgorithm()
+        {
+            return this.attackAlgorithm;
+        }
+        public virtual MoveAlgorithm GetMoveAlgorithm()
+        {
+            return this.moveAlgorithm;
+        }
+        public virtual void SetAttackAlgorithm(AttackAlgorithm attackAlgorithm)
+        {
+            this.attackAlgorithm = attackAlgorithm;
+        }
+        public virtual void SetMoveAlgorithm(MoveAlgorithm moveAlgorithm)
+        {
+            this.moveAlgorithm = moveAlgorithm;
+        }
         public abstract void Move();
         public abstract void Attack();
         public abstract void Die();
@@ -68,7 +80,7 @@ namespace SignalRWebPack.Character
                 { "name", name },
                 { "health", health.ToString() },
                 { "sprite", sprite },
-                { "areaId", areaId.ToString() },
+                { "areaId", AreaId.ToString() },
                 { "x", Position.X.ToString() },
                 { "y", Position.Y.ToString() },
                 { "speed", speed.ToString() },
@@ -79,5 +91,17 @@ namespace SignalRWebPack.Character
             };
             return characterData;
         }
+        public Character ShallowCopy(){
+            return (Character)this.MemberwiseClone();
+        }
+
+        public Character DeepCopy(){
+        
+            var charas = (Character)this.MemberwiseClone();
+            charas.Position = new Vector2D(this.Position.X, this.Position.Y);
+            charas.SetMoveAlgorithm(this.GetMoveAlgorithm().DeepCopy());
+
+           return charas;
+        } 
     }
 }

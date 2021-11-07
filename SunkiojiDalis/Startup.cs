@@ -38,8 +38,6 @@ namespace SignalRWebPack
 
             app.UseEndpoints(endpoints =>
             {
-                var item = ItemsList.GenerateItem();
-                ItemsList.AddItemToList(item);
                 endpoints.MapHub<ChatHub>("/chatHub");
             });
         }

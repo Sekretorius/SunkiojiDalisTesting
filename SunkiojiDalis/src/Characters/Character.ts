@@ -1,4 +1,5 @@
 import { Vector2D } from '../Helpers/Vector2D';
+import { DestroyObject } from '../Managers/ClientEngine';
 
 export class Character
 {
@@ -6,7 +7,7 @@ export class Character
     name: string;
     health: number;
     sprite: string;
-    areaId: number;
+    areaId: string;
     position: Vector2D;
     width: number;
     height: number;
@@ -24,7 +25,7 @@ export class Character
         this.name = characterData.name;
         this.health = parseFloat(characterData.health);
         this.sprite = characterData.sprite;
-        this.areaId = parseInt(characterData.areaId);
+        this.areaId = characterData.areaId;
         this.position = new Vector2D(parseFloat(characterData.x), parseFloat(characterData.y));
         this.width = parseInt(characterData.width);
         this.height = parseInt(characterData.height);
@@ -34,9 +35,6 @@ export class Character
 
         this.targetPosition = new Vector2D(parseFloat(characterData.x), parseFloat(characterData.y));
         this.originPosition = new Vector2D(parseFloat(characterData.x), parseFloat(characterData.y));
-
-        this.travelTime = 0;
-        this.elapsedTime = 0;
     }
 
     GetAttackAlgorithm(){
@@ -57,5 +55,10 @@ export class Character
 
     Die(){
 
+    }
+
+    Destroy(data: string)
+    {
+        DestroyObject(this.guid);
     }
 }

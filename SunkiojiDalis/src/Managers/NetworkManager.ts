@@ -1,17 +1,15 @@
 
-import { connection } from "../index"
+//import index =  require("../index")
+import { Console } from "console";
 import { ClientObjects, ClientEngineMethods } from "./ClientEngine"
 
-connection.on("ClientRequestHandler", function (requests) {
-    let requestValues = JSON.parse(requests);
-    if (requestValues.length > 0) {
-        ProccessServerRequests(requestValues);
-    }
-});
-
-function ProccessServerRequests(requests: any){
+export function ProccessServerRequests(requests: any){
     for(const request of requests) {
-        let requestData = JSON.parse(request.RequestData);
+        let requestData = null;
+        if(request.RequestData)
+        {
+            requestData = JSON.parse(request.RequestData);
+        }
         let serverRequest = new NetworkRequest(request.RequestObjectGuid, request.RequestMethod, requestData);
         HandleServerRequests(serverRequest);
     }
@@ -35,11 +33,11 @@ function InvokeObjectMethod(targetObject: any, method: any, data: any): boolean 
     return false;
 }
 
-function SendRequestToServer(requests: any){
-    connection.invoke("HandleClientRequest", JSON.stringify(requests)).catch(function (err) {
-        return console.error(err.toString());
-      });
-}
+//function SendRequestToServer(requests: any){
+//    connection.invoke("HandleClientRequest", JSON.stringify(requests)).catch(function (err) {
+//        return console.error(err.toString());
+//      });
+//}
 
 export class NetworkRequest{
     RequestObjectGuid: string;

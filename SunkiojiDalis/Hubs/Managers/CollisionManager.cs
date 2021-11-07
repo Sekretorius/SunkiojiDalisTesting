@@ -91,7 +91,7 @@ public class CollisionManager
 
         lock(CollisionProccessLock)
         {
-            if(!collisions.ContainsKey(collider))
+            if(collider.GameObject != null && !collisions.ContainsKey(collider))
             {
                 collisions.Add(collider, new Dictionary<Collider, List<ColliderPoint>>());
             }
@@ -100,13 +100,15 @@ public class CollisionManager
             {
                 if(point.Collider != collider)
                 {
-                    if(!collisions[collider].ContainsKey(point.Collider))
+                    if(collider.GameObject != null)
                     {
-                        collisions[collider].Add(point.Collider, new List<ColliderPoint>());
+                        if(!collisions[collider].ContainsKey(point.Collider))
+                        {
+                            collisions[collider].Add(point.Collider, new List<ColliderPoint>());
+                        }
+
+                        collisions[collider][point.Collider].Add(point);
                     }
-
-                    collisions[collider][point.Collider].Add(point);
-
                     AddCollisionToMap(point.Collider, collider, new ColliderPoint(collider, point.ColliderVertex));
                 }
             }

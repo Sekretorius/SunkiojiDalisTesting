@@ -5,7 +5,7 @@ using System;
 using Newtonsoft.Json;
 using System.Linq;
 
-namespace SignalRWebPack.Character
+namespace SignalRWebPack.Characters
 {
     public enum AttackType
     {
@@ -22,6 +22,6 @@ namespace SignalRWebPack.Character
             this.damage = damage;
         }
 
-        public abstract void Attack(float x, float y); //should have more parametres (like maybe sprite or something)
+        public abstract float Attack(Vector2D attacker, Vector2D target); //should have more parametres (like maybe sprite or something)
     }
 }

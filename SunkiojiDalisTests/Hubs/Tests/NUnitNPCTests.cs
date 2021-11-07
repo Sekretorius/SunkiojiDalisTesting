@@ -1,6 +1,6 @@
 ﻿
 using NUnit.Framework;
-using SignalRWebPack.Character;
+using SignalRWebPack.Characters;
 using SignalRWebPack.Engine;
 using System;
 using System.Collections.Generic;

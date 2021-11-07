@@ -5,8 +5,9 @@ using System;
 using Newtonsoft.Json;
 using System.Linq;
 using SignalRWebPack.Engine;
+using SignalRWebPack.Hubs;
 
-namespace SignalRWebPack.Character
+namespace SignalRWebPack.Characters
 {
     public class EnemyNpc : NPC
     {
@@ -14,7 +15,7 @@ namespace SignalRWebPack.Character
             string name = null, 
             float health = 0, 
             string sprite = null, 
-            int areaId = 0, 
+            string areaId = "", 
             Vector2D position = null, 
             int width = 0, 
             int height = 0, 
@@ -23,36 +24,57 @@ namespace SignalRWebPack.Character
             int speed = 0,
             bool moving = false) : base(name, health, sprite, areaId, position, width, height, frameX, frameY, speed, moving){ this.collider = new Collider(new Rect(position, new Vector2D(width, height)), this); }
 
-        private List<Vector2D> targets = new List<Vector2D>()
+        private List<Vector2D> targets;
+        public override void Init()
         {
-            new Vector2D(100, 0)
-        };
+            base.Init();
+            Random random = new Random();
+
+            targets = new List<Vector2D>()
+            {
+                new Vector2D(random.Next(50, 750), random.Next(50, 450)),
+                new Vector2D(random.Next(50, 750), random.Next(50, 450)),
+                new Vector2D(random.Next(50, 750), random.Next(50, 450)),
+                new Vector2D(random.Next(50, 750), random.Next(50, 450))
+            };
+        }
         int c = 0;
+
+        float attackDelay = 0;
+        float attackDelayTimmer = 0;
         public override void Update()
         {
+            if(this.moveAlgorithm == null) return;
             if(targets[c] == Position)
             {
                 c++;
                 if(c >= targets.Count){
-                    c = 0;
+                    c = 0;   
                 }
             }
-            this.Position = MoveAlgorithm.Move(this.Position, targets[c], speed);
-            //SyncDataWithClients("SyncPosition", $"{{\"x\":\"{this.Position.X}\", \"y\":\"{this.Position.Y}\"}}");
+            this.Position = this.moveAlgorithm.Move(this.Position, targets[c], speed);
+            SyncDataWithGroup(AreaId, "SyncPosition", $"{{\"x\":\"{this.Position.X}\", \"y\":\"{this.Position.Y}\"}}");
+
+            TryAttack();
+        }
+
+        private void TryAttack()
+        {
+            if(this.attackAlgorithm != null && attackDelayTimmer >= attackDelay)
+            {
+                attackDelay = this.attackAlgorithm.Attack(this.Position, new Vector2D(1, 0));
+                attackDelayTimmer = 0;
+            }
+            attackDelayTimmer += ServerEngine.Instance.UpdateTime;
         }
 
         public override void Shout(){}
-        public override void SetAttackAlgorithm(AttackAlgorithm attackAlgorithm){}
-        //public override void SetMoveAlgorithm(MoveAlgorithm moveAlgorithm){}
-        public override AttackAlgorithm GetAttackAlgorithm(){ return null; }
-        public override MoveAlgorithm GetMoveAlgorithm(){ return null; }
         public override void Move(){}
         public override void Attack(){}
         public override void Die(){}
 
         public override void OnCollision(Collision collision)
         {
-            Console.WriteLine(collision.Collider.GameObject.GUID);
         }
         public override Dictionary<string, string> OnClientSideCreation()
         {
@@ -60,6 +82,11 @@ namespace SignalRWebPack.Character
             friendlyNpcData["objectType"] = nameof(ServerObjectType.EnemyNpc);
             
             return friendlyNpcData;
+        }
+
+        public void TakeDamage(float damage)
+        {
+            health -= damage;
         }
     }
 }

@@ -3,6 +3,11 @@ public class Collider
 {
     public Rect Boundry { get; set; }
     public IObject GameObject { get; private set; }
+
+    public Collider(Rect boundry) // will not receive collision invokes
+    {
+        Boundry = boundry;
+    }
     public Collider(Rect boundry, IObject gameObject)
     {
         Boundry = boundry;
@@ -10,6 +15,9 @@ public class Collider
     }
     public virtual void OnCollision(Collision collision)
     {
-        GameObject.OnCollision(collision);
+        if(GameObject != null)
+        {
+            GameObject.OnCollision(collision);
+        }
     }
 }

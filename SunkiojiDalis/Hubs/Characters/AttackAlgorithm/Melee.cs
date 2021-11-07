@@ -5,15 +5,22 @@ using System;
 using Newtonsoft.Json;
 using System.Linq;
 
-namespace SignalRWebPack.Character
+namespace SignalRWebPack.Characters
 {
     public class Melee : AttackAlgorithm
     {
-        public Melee(float damage) : base(damage) {}
-
-        public override void Attack(float x, float y)
+        private float attackDelay = 0;
+        private string areaId;
+        public Melee(string areaId, float attackDelay, float damage) : base(damage)
         {
+            this.areaId = areaId;
+            this.attackDelay = attackDelay;
+        }
 
+        public override float Attack(Vector2D attacker, Vector2D target)
+        {
+            Projectile p = new Projectile(areaId, "resources/items/weapon/weapon4.png", attacker, new Rect(attacker, new Vector2D(32, 32)), 0, new Vector2D(0,0), 0.5f);
+            return attackDelay;
         }
     }
 }
