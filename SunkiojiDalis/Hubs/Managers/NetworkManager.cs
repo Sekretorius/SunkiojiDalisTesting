@@ -103,7 +103,7 @@ namespace SignalRWebPack.Network
             networkObjects.Remove(networkObject);
         }
 
-        public void AddNewObjectToAllClients(NetworkObject networkObject){
+        public virtual void AddNewObjectToAllClients(NetworkObject networkObject){
             if(networkObject == null) return;
             
             lock(ProccessNetworkObjectLock)
@@ -119,7 +119,7 @@ namespace SignalRWebPack.Network
             }
         }
 
-        public void AddNewObjectToGroup(string groupId, NetworkObject networkObject){
+        public virtual void AddNewObjectToGroup(string groupId, NetworkObject networkObject){
             if(networkObject == null) return;
             
             lock(ProccessNetworkObjectLock)
@@ -135,7 +135,7 @@ namespace SignalRWebPack.Network
             }
         }
 
-        public void AddNewObjectToSingleClient(string clientId, NetworkObject networkObject){
+        public virtual void AddNewObjectToSingleClient(string clientId, NetworkObject networkObject){
             if(networkObject == null) return;
 
             lock(ProccessNetworkObjectLock)
@@ -186,21 +186,21 @@ namespace SignalRWebPack.Network
             }
         }
 
-        public async Task SyncDataWithClients(List<NetworkRequest> requests)
+        public virtual async Task SyncDataWithClients(List<NetworkRequest> requests)
         {
             if (GameHub == null || requests == null || requests.Count == 0) return;
             string requestData = JsonConvert.SerializeObject(requests);
             await GameHub.Clients.All.SendAsync(ClientRequestHandlerMethod, requestData);
         }
 
-        public async Task SyncDataWithGroup(string groupId, List<NetworkRequest> requests)
+        public virtual async Task SyncDataWithGroup(string groupId, List<NetworkRequest> requests)
         {
             if (GameHub == null || requests == null || requests.Count == 0) return;
             string requestData = JsonConvert.SerializeObject(requests);
             await GameHub.Clients.Group(groupId).SendAsync(ClientRequestHandlerMethod, requestData);
         }
 
-        public async Task SyncDataWithClient(string clientId, List<NetworkRequest> requests)
+        public virtual async Task SyncDataWithClient(string clientId, List<NetworkRequest> requests)
         {
             if (GameHub == null || requests == null || requests.Count == 0) return;
             string requestData = JsonConvert.SerializeObject(requests);
@@ -242,7 +242,7 @@ namespace SignalRWebPack.Network
             }
         }
 
-        public List<NetworkRequest> FormGroupObjectCreateRequest(string groupId) //to do: make forms for group areas 
+        public virtual List<NetworkRequest> FormGroupObjectCreateRequest(string groupId) //to do: make forms for group areas 
         {
             lock(ProccessNetworkObjectLock)
             {
@@ -260,7 +260,7 @@ namespace SignalRWebPack.Network
             }
         }
 
-        public async Task OnNewClientConnected(IClientProxy client) //to do: has to have different functionality // if it spawns in area ...
+        public virtual async Task OnNewClientConnected(IClientProxy client) //to do: has to have different functionality // if it spawns in area ...
         {
             List<NetworkRequest> requestForms = FormGroupObjectCreateRequest("3,3");
             if(requestForms.Count > 0)
@@ -270,7 +270,7 @@ namespace SignalRWebPack.Network
             }
         }
 
-        public async Task OnAreaChange(Player player) //to do: has to have different functionality // if it spawns in area ...
+        public virtual async Task OnAreaChange(Player player) //to do: has to have different functionality // if it spawns in area ...
         {
             var requestData = JsonConvert.SerializeObject(new List<NetworkRequest>() { new NetworkRequest("", nameof(MainNetworkRequests.RemoveAllObjects), "")});
             await player.proxy.SendAsync(ClientRequestHandlerMethod, requestData);
@@ -336,17 +336,17 @@ namespace SignalRWebPack.Network
             SyncDataWithGroup(AreaId, "Destroy", null);
         }
         public virtual void OnCollision(Collision collision) {}
-        protected void SyncDataWithClients(string method, string dataJson)
+        public virtual void SyncDataWithClients(string method, string dataJson)
         {
             NetworkManager.AddRequestToAllClients(new NetworkRequest(guid, method, dataJson));
         }
 
-        protected void SyncDataWithGroup(string groupId, string method, string dataJson)
+        public virtual void SyncDataWithGroup(string groupId, string method, string dataJson)
         {
             NetworkManager.AddRequestToGroup(groupId, new NetworkRequest(guid, method, dataJson));
         }
 
-        protected void SyncDataWithClient(string clientId, string method, string dataJson)
+        public virtual void SyncDataWithClient(string clientId, string method, string dataJson)
         {
             NetworkManager.AddRequestToSingleClient(clientId, new NetworkRequest(guid, method, dataJson));
         }

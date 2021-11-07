@@ -23,7 +23,7 @@ namespace SignalRWebPack.Characters
             int speed = 0,
             bool moving = false) : base(name, health, sprite, areaId, position, width, height, frameX, frameY, speed, moving){}
 
-        private List<Vector2D> targets;
+        public List<Vector2D> targets;
         public override void Init()
         {
             base.Init();

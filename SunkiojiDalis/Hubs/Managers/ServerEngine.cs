@@ -81,13 +81,18 @@ namespace SignalRWebPack.Engine
             collisionManager = new CollisionManager();
             collisionManager.Init();
 
-            networkManager = new NetworkManager();
-            networkManager.SetHubContext(Program.IHubContext);
-
-
             Facade servas = new Facade();
             servas.Factory();
             servas.Builder();
+        }
+
+        public void SetNetworkManager(NetworkManager networkManager)
+        {
+            NetworkManager = networkManager;
+        }
+        public void SetInstance(ServerEngine serverEngine)
+        {
+            Instance = serverEngine;
         }
 
         //creates instance only on server
