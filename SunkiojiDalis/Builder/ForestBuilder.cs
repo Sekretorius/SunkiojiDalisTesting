@@ -6,9 +6,9 @@ using SignalRWebPack.Obstacles;
 
 namespace SignalRWebPack {
   public class ForestBuilder : IBuilder {
-        private int x;
-        private int y;
-        private ForestArea forest;
+        public int x;
+        public int y;
+        public ForestArea forest;
         
         public ForestBuilder(int x, int y)
         {

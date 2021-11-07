@@ -8,7 +8,7 @@ namespace SignalRWebPack {
   public class DesertBuilder : IBuilder {
         private int x;
         private int y;
-        private DesertArea desert;
+        public DesertArea desert;
         
         public DesertBuilder(int x, int y)
         {
@@ -29,7 +29,7 @@ namespace SignalRWebPack {
             var enemy = npcCreator.FactoryMethod(NpcType.Animal, null, $"{x},{y}");
 
             var randomEnemy_1 = npcCreator.FactoryMethod(NpcType.Enemy, "slow_enemy", $"{x},{y}");
-            var randomEnemy_2 = npcCreator.FactoryMethod(NpcType.Enemy, "slow_enemy", $"{x},{y}");
+            var randomEnemy_2 = npcCreator.FactoryMethod(NpcType.Enemy, "fast_enemy", $"{x},{y}");
 
             enemy.SetMoveAlgorithm(new Stand());
 

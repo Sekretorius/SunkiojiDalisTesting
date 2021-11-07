@@ -28,7 +28,7 @@ namespace SignalRWebPack.Hubs.Worlds
             }
         }
 
-        private Area[,] world = new Area[width, height];
+        public Area[,] world = new Area[width, height];
 
         public World()
         {
