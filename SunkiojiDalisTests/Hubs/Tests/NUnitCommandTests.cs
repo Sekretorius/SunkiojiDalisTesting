@@ -11,68 +11,68 @@ namespace SunkiojiDalisTests.Hubs.Tests
     [TestFixture]
     class NUnitCommandTests
     {
-        [Test]
-        public void UpCommandTest()
+        [TestCase(5,2)]
+        public void UpCommandTest(int count,int undo)
         {
             Player player = new Player(0, 0, 0, 0, 0, 0, 0, speed : 1, false, null, 0, 0, null);
 
-            player.control.MoveUp();
-            player.control.MoveUp();
-            player.control.MoveUp();
+            for (int i = 0; i < count; i++)
+                player.control.MoveUp();
 
-            Assert.AreEqual(-3,player.y);
+            Assert.AreEqual(-count,player.y);
 
-            player.control.Undo();
-            player.control.Undo();
+            for (int i = 0; i < undo; i++)
+                player.control.Undo();
 
-            Assert.AreEqual(-1, player.y);
+            Assert.AreEqual(-(count-undo), player.y);
         }
 
-        [Test]
-        public void DownCommandTest()
+        [TestCase(2, 2)]
+        public void DownCommandTest(int count, int undo)
         {
             Player player = new Player(0, 0, 0, 0, 0, 0, 0, speed: 1, false, null, 0, 0, null);
 
-            player.control.MoveDown();
-            player.control.MoveDown();
+            for (int i = 0; i < count; i++)
+                player.control.MoveDown();
 
-            Assert.AreEqual(2, player.y);
+            Assert.AreEqual(count, player.y);
 
-            player.control.Undo();
-            player.control.Undo();
+            for (int i = 0; i < undo; i++)
+                player.control.Undo();
 
-            Assert.AreEqual(0, player.y);
+            Assert.AreEqual(count-undo, player.y);
         }
 
-        [Test]
-        public void LeftCommandTest()
+        [TestCase(4, 1)]
+        public void LeftCommandTest(int count, int undo)
         {
             Player player = new Player(0, 0, 0, 0, 0, 0, 0, speed: 1, false, null, 0, 0, null);
 
-            player.control.MoveLeft();
-            player.control.MoveLeft();
-            player.control.MoveLeft();
-            player.control.MoveLeft();
+            for (int i = 0; i < count; i++)
+                player.control.MoveLeft();
 
-            Assert.AreEqual(-4, player.x);
+            Assert.AreEqual(-count, player.x);
 
-            player.control.Undo();
+            for (int i = 0; i < undo; i++)
+                player.control.Undo();
 
-            Assert.AreEqual(-3, player.x);
+            Assert.AreEqual(-(count - undo), player.x);
         }
 
-        [Test]
-        public void RightCommandTest()
+        [TestCase(1, 1)]
+        public void RightCommandTest(int count, int undo)
         {
             Player player = new Player(0, 0, 0, 0, 0, 0, 0, speed: 1, false, null, 0, 0, null);
 
-            player.control.MoveRight();
+            for (int i = 0; i < count; i++)
+                player.control.MoveRight();
 
-            Assert.AreEqual(1, player.x);
+            Assert.AreEqual(count, player.x);
 
-            player.control.Undo();
+            for (int i = 0; i < undo; i++)
+                player.control.Undo();
 
-            Assert.AreEqual(0, player.x);
+            Assert.AreEqual(count-undo, player.x);
         }
     }
 }

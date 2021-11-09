@@ -32,6 +32,7 @@ namespace SignalRWebPack.Characters
     {
         Friendly,
         Enemy,
-        Animal
+        Animal,
+        Unknown
     }
 }

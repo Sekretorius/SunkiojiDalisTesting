@@ -45,7 +45,7 @@ namespace SignalRWebPack.Hubs.Worlds
         }
         public void RemoveItem(Item item)
         {
-            players.Remove(item.Id);
+            items.Remove(item.Id);
         }
         public void UpdateItem(Item item)
         {
@@ -69,6 +69,7 @@ namespace SignalRWebPack.Hubs.Worlds
         // Obstacles
         public void AddObstacle(Obstacle obstacle)
         {
+            obstacle.OnClientSideCreation();
             obstacles[obstacle.Id] = obstacle;
         }
         public void RemoveObstacle(Obstacle obstacle)

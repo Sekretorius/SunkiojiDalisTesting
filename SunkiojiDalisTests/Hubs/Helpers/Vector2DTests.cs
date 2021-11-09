@@ -13,14 +13,65 @@ namespace Tests
         [TestMethod()]
         public void ProjectOnTest()
         {
-            Vector2D vector = new Vector2D(10,10);
-            Vector2D projectionVector = new Vector2D(0,1);
-            Vector2D projectedVector = Vector2D.ProjectOn(vector, projectionVector);
+            Assert.Fail();
+        }
 
-            Assert.IsTrue(new Vector2D(0,10) == projectedVector);
+        [TestMethod()]
+        public void Vector2DTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void GetMagniduteTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void NormalizeTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void DirectionToTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void LerpTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void ProjectOnTest1()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void DotProductTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void EqualsTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void GetHashCodeTest()
+        {
+            Assert.Fail();
         }
     }
 }
+
 
 
 

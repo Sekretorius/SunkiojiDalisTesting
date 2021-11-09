@@ -38,6 +38,7 @@ namespace SignalRWebPack.Obstacles
 
   public enum ObstacleType {
     Passable,
-    Impassable
+    Impassable,
+    Unknown
   }
 }

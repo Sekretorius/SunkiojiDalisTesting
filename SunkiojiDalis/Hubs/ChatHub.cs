@@ -64,8 +64,8 @@ namespace SignalRWebPack.Hubs
 
         public void MoveToArea(int stepX, int stepY, int x, int y)
         {
-            worldX += stepX;
-            worldY += stepY;
+            worldX = stepX;
+            worldY = stepY;
             this.x = x;
             this.y = y;
         }
@@ -77,7 +77,7 @@ namespace SignalRWebPack.Hubs
 
         public void Update(string message)
         {
-            proxy.SendAsync("RecieveNotification", JsonConvert.SerializeObject(message));
+            //proxy.SendAsync("RecieveNotification", JsonConvert.SerializeObject(message));
         }
 
         public void Notify()

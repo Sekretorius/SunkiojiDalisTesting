@@ -28,6 +28,7 @@ namespace SignalRWebPack {
             var npcCreator = new NpcCreator();
             var randomEnemy_1 = npcCreator.FactoryMethod(NpcType.Enemy, "fast_enemy", $"{x},{y}");
             var randomEnemy_2 = npcCreator.FactoryMethod(NpcType.Enemy, "normal_enemy", $"{x},{y}");
+            var randomEnemy_3 = npcCreator.FactoryMethod(NpcType.Unknown, "normal_enemy", $"{x},{y}");
 
             randomEnemy_1.SetMoveAlgorithm(new MixedMove(30));
             randomEnemy_2.SetMoveAlgorithm(new Walk());
@@ -71,6 +72,14 @@ namespace SignalRWebPack {
             }
             this.forest.AddObstacle(obstacleCreator.FactoryMethod(ObstacleType.Impassable, "rocks1", $"{x},{y}"));
             this.forest.AddObstacle(obstacleCreator.FactoryMethod(ObstacleType.Impassable, "rocks1", $"{x},{y}"));
+            obstacleCreator.FactoryMethod(ObstacleType.Passable, "bush", $"{x},{y}");
+            obstacleCreator.FactoryMethod(ObstacleType.Passable, "cactus", $"{x},{y}");
+            obstacleCreator.FactoryMethod(ObstacleType.Passable, "test", $"{x},{y}");
+            obstacleCreator.FactoryMethod(ObstacleType.Impassable, "house1", $"{x},{y}");
+            obstacleCreator.FactoryMethod(ObstacleType.Impassable, "house2", $"{x},{y}");
+            obstacleCreator.FactoryMethod(ObstacleType.Impassable, "tree1", $"{x},{y}");
+            obstacleCreator.FactoryMethod(ObstacleType.Impassable, "test", $"{x},{y}");
+            obstacleCreator.FactoryMethod(ObstacleType.Unknown, "tree1", $"{x},{y}");
         }
 
         public ForestArea GetProduct()
