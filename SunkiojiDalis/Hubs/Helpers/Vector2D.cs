@@ -31,9 +31,9 @@ public class Vector2D
         return origin + direction * t;
     }
 
-    public static Vector2D ProjectOn(Vector2D vector, Vector2D prjectionVector) 
+    public static Vector2D ProjectOn(Vector2D vector, Vector2D projectionVector) 
     {
-        Vector2D normalizedV = prjectionVector.Normalize();
+        Vector2D normalizedV = projectionVector.Normalize();
         float dotProduct = Vector2D.DotProduct(vector, normalizedV);
         return normalizedV * dotProduct;
     }

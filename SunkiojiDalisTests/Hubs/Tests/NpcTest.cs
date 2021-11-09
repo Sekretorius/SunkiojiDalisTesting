@@ -204,6 +204,7 @@ namespace SunkiojiDalisTests.Hubs.Tests
             Assert.AreNotEqual(data, null);
         }
 
+        [OneTimeSetUp]
         public static Mock<ServerEngine> SetupEngine()
         {
             Mock<ServerEngine> ServerEngineMock = new Mock<ServerEngine>();
