@@ -12,6 +12,9 @@ namespace SunkiojiDalisTests.Hubs.Tests
     class NUnitCommandTests
     {
         [TestCase(5,2)]
+        [TestCase(6,3)]
+        [TestCase(2,2)]
+        [TestCase(4,2)]
         public void UpCommandTest(int count,int undo)
         {
             Player player = new Player(0, 0, 0, 0, 0, 0, 0, speed : 1, false, null, 0, 0, null);
@@ -27,7 +30,10 @@ namespace SunkiojiDalisTests.Hubs.Tests
             Assert.AreEqual(-(count-undo), player.y);
         }
 
-        [TestCase(2, 2)]
+        [TestCase(5, 1)]
+        [TestCase(6, 3)]
+        [TestCase(4, 3)]
+        [TestCase(8, 6)]
         public void DownCommandTest(int count, int undo)
         {
             Player player = new Player(0, 0, 0, 0, 0, 0, 0, speed: 1, false, null, 0, 0, null);
@@ -43,7 +49,10 @@ namespace SunkiojiDalisTests.Hubs.Tests
             Assert.AreEqual(count-undo, player.y);
         }
 
-        [TestCase(4, 1)]
+        [TestCase(5, 4)]
+        [TestCase(6, 3)]
+        [TestCase(7, 4)]
+        [TestCase(2, 1)]
         public void LeftCommandTest(int count, int undo)
         {
             Player player = new Player(0, 0, 0, 0, 0, 0, 0, speed: 1, false, null, 0, 0, null);
@@ -60,6 +69,9 @@ namespace SunkiojiDalisTests.Hubs.Tests
         }
 
         [TestCase(1, 1)]
+        [TestCase(3, 3)]
+        [TestCase(7, 5)]
+        [TestCase(6, 2)]
         public void RightCommandTest(int count, int undo)
         {
             Player player = new Player(0, 0, 0, 0, 0, 0, 0, speed: 1, false, null, 0, 0, null);
