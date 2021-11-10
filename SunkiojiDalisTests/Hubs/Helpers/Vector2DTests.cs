@@ -13,7 +13,11 @@ namespace Tests
         [Test]
         public void ProjectOnTest()
         {
-            Assert.Fail();
+            Vector2D vector = new Vector2D(10, 10);
+            Vector2D projectionVector = new Vector2D(0, 1);
+            Vector2D projectedVector = Vector2D.ProjectOn(vector, projectionVector);
+
+            Assert.IsTrue(new Vector2D(0, 10) == projectedVector);
         }
 
         [Test]
