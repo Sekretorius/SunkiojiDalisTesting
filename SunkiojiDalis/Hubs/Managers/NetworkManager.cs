@@ -335,7 +335,6 @@ namespace SignalRWebPack.Network
         { 
             SyncDataWithGroup(AreaId, "Destroy", null);
         }
-        public virtual void OnCollision(Collision collision) {}
         public virtual void SyncDataWithClients(string method, string dataJson)
         {
             NetworkManager.AddRequestToAllClients(new NetworkRequest(guid, method, dataJson));

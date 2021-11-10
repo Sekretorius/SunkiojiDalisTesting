@@ -56,10 +56,6 @@ namespace SignalRWebPack.Characters
         public override void Move(){}
         public override void Attack(){}
         public override void Die(){}
-
-        public override void OnCollision(Collision collision)
-        {
-        }
         public override Dictionary<string, string> OnClientSideCreation()
         {
             Dictionary<string, string> friendlyNpcData = base.OnClientSideCreation();

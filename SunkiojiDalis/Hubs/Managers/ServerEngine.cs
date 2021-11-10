@@ -46,20 +46,6 @@ namespace SignalRWebPack.Engine
             set { if(networkManager == null) networkManager = value; }
         }
 
-        private static CollisionManager collisionManager;
-        public static CollisionManager CollisionManager 
-        {
-            get
-            {
-                if(collisionManager == null)
-                {
-                    collisionManager = new CollisionManager();
-                }
-                return collisionManager;
-            }
-            set { if(collisionManager == null) collisionManager = value; }
-        }
-
         public float UpdateTime { get; set; } = 0; // to do: optimize
         
         private readonly object ObjectProccessLock = new object();
@@ -77,9 +63,6 @@ namespace SignalRWebPack.Engine
                 Console.WriteLine("SERVER ENGINE STARTING");
                 UpdateTask();
             });
-
-            collisionManager = new CollisionManager();
-            collisionManager.Init();
 
             Facade servas = new Facade();
             servas.Factory();
@@ -121,9 +104,6 @@ namespace SignalRWebPack.Engine
             {
                 stopWatch = Stopwatch.StartNew();
 
-                //collision check
-                collisionManager.Update(); 
-
                 lock (ObjectProccessLock)
                 {
                     //start
@@ -142,11 +122,6 @@ namespace SignalRWebPack.Engine
                             {
                                 NetworkManager.AddNewObjectToGroup(newObject.AreaId, (NetworkObject)newObject);
                             }
-
-                            if(newObject.Collider != null)
-                            {
-                                collisionManager.RegisterCollider("0", newObject.Collider); //to add world id
-                            }
                         }
                     }
 
@@ -157,11 +132,6 @@ namespace SignalRWebPack.Engine
                         IObject updatingObject = instantiadedObjects[updatingObjectId];
                         if(updatingObject.IsDestroyed)
                         {
-                            if(updatingObject.Collider != null)
-                            {
-                                collisionManager.UnRegisterCollider(updatingObject.Collider);
-                            }
-                            
                             if(updatingObject is NetworkObject)
                             {
                                 networkManager.RemoveNetworkObject((NetworkObject)updatingObject);
@@ -218,7 +188,6 @@ namespace SignalRWebPack.Engine
         void Init();
         void Update();
         void Destroy();
-        void OnCollision(Collision collision);
     }
 
     public abstract class ServerObject : IObject
@@ -250,7 +219,6 @@ namespace SignalRWebPack.Engine
         public virtual void Init(){}
         public virtual void Update(){}
         public virtual void Destroy(){}
-        public virtual void OnCollision(Collision collision) {}
     }
 
     public enum ServerObjectType

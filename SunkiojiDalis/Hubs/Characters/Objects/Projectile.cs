@@ -40,7 +40,7 @@ public class Projectile : NetworkObject
     public override void Update()
     {
         timmer += ServerEngine.Instance.UpdateTime;
-        if(timmer >= lifeSpan)
+        if (timmer >= lifeSpan)
         {
             IsDestroyed = true;
             Destroy();
@@ -49,12 +49,6 @@ public class Projectile : NetworkObject
 
         Position += direction * speed * ServerEngine.Instance.UpdateTime;
         SyncDataWithGroup(AreaId, "SyncPosition", $"{{\"x\":\"{this.Position.X}\", \"y\":\"{this.Position.Y}\"}}");
-    }
-    public override void OnCollision(Collision collision)
-    {
-        //Console.WriteLine("COLLISION");
-        //IsDestroyed = true;
-        //Destroy();
     }
 
     public override Dictionary<string, string> OnClientSideCreation()

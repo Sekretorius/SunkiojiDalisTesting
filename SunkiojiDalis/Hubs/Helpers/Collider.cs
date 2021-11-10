@@ -13,11 +13,4 @@ public class Collider
         Boundry = boundry;
         GameObject = gameObject;
     }
-    public virtual void OnCollision(Collision collision)
-    {
-        if(GameObject != null)
-        {
-            GameObject.OnCollision(collision);
-        }
-    }
 }
