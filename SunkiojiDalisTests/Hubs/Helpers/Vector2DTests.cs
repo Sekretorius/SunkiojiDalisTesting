@@ -76,12 +76,6 @@ namespace Tests
             Assert.IsTrue(new3 == target);
         }
 
-        [Test]
-        public void ProjectOnTest1()
-        {
-            Assert.Fail();
-        }
-
         [TestCase(0, 1, 0, 1, ExpectedResult = 1)]
         [TestCase(0, 1, 1, 1, ExpectedResult = 1)]
         [TestCase(0, 0, 0, 0, ExpectedResult = 0)]
@@ -93,8 +87,8 @@ namespace Tests
             return Vector2D.DotProduct(vector1, vector2);
         }
 
-        [TestCase(0, 10, 0, 1, ExpectedResult = true)]
         [TestCase(0, 10, 0, 1, ExpectedResult = false)]
+        [TestCase(0, 10, 0, 10, ExpectedResult = false)]
         public bool EqualsTest(float x, float y, float nx, float ny)
         {
             Vector2D vector1 = new(x, y);
@@ -102,6 +96,8 @@ namespace Tests
 
             return vector1.Equals(vector2);
         }
+
+        [Test]
         public void GetHashCodeTest()
         {
             Vector2D vector2D = new(0, 0);
