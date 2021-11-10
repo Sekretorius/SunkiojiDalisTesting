@@ -18,12 +18,11 @@ namespace SunkiojiDalisTests.Hubs.Tests
     [TestFixture]
     class NpcTest
     {
-        [SetUp]
         public static void SetupEngine()
         {
             ServerEngine ServerEngine = new ServerEngine();
             ServerEngine.SetInstance(ServerEngine);
-            ServerEngine.SetNetworkManager(new NetworkManagerMock());
+            ServerEngine.SetNetworkManager(new NetworkManagerStub());
             ServerEngine.Initialize();
         }
 
@@ -145,29 +144,36 @@ namespace SunkiojiDalisTests.Hubs.Tests
         [Test]
         public void AnimalNpcUpdateTest()
         {
-            SetupEngine();
-            AnimalNpc animalNpc = new AnimalNpc("name", 100, "sprite", "area", new Vector2D(10, 10), 100, 25, 10, 10, 5, true);
+            Mock<AnimalNpc> animalNpc = new Mock<AnimalNpc>("name", 100, "sprite", "area", new Vector2D(10, 10), 100, 25, 10, 10, 5, true) { };
 
-            animalNpc.SetMoveAlgorithm(new Walk());
+            animalNpc.Setup(x => x.SyncDataWithGroup("", "Destroy", null));
+            animalNpc.Setup(x => x.Update()).CallBase();
+            animalNpc.Setup(x => x.Move()).CallBase();
+            animalNpc.Object.targets = new List<Vector2D>() { new Vector2D(20, 20) };
+            animalNpc.Object.moveAlgorithm = new Walk();
 
             ServerEngine.Instance.UpdateTime = 10;
 
-            animalNpc.targets = new List<Vector2D>() { new Vector2D(20, 20) };
-            animalNpc.Update();
+            animalNpc.Object.Update();
 
-            Assert.AreNotEqual(animalNpc.Position.X, 10);
-            Assert.AreNotEqual(animalNpc.Position.Y, 10);
+            Assert.AreNotEqual(animalNpc.Object.Position.X, 10);
+            Assert.AreNotEqual(animalNpc.Object.Position.Y, 10);
+
+            animalNpc.Verify(x => x.SyncDataWithGroup(animalNpc.Object.AreaId, "SyncPosition", $"{{\"x\":\"{animalNpc.Object.Position.X}\", \"y\":\"{animalNpc.Object.Position.Y}\"}}"), Times.AtLeastOnce());
         }
+
 
         [Test]
         public void NpcUpdateDestroy()
         {
+            Mock<FriendlyNpc> mock = new Mock<FriendlyNpc>() { };
 
-            Mock<FriendlyNpc> mock = new Mock<FriendlyNpc>();
-            mock.Setup(x => x.SyncDataWithGroup(null, "Destroy", null));
+            mock.Setup(x => x.Destroy()).CallBase();
+            mock.Setup(x => x.SyncDataWithGroup("", "Destroy", null));
 
-            mock.Verify(x => x.SyncDataWithGroup(null, "Destroy", null), Times.AtLeastOnce());
-            //bad 
+            mock.Object.Destroy();
+
+            mock.Verify(x => x.SyncDataWithGroup("", "Destroy", null), Times.AtLeastOnce());
         }
 
         [Test]

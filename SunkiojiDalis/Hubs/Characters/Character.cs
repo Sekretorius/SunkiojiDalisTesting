@@ -20,8 +20,8 @@ namespace SignalRWebPack.Characters
         public int frameX;
         public int frameY;
         public int areaId;
-        protected MoveAlgorithm moveAlgorithm; //must be private
-        protected AttackAlgorithm attackAlgorithm; //must be private
+        public MoveAlgorithm moveAlgorithm; //must be private
+        public AttackAlgorithm attackAlgorithm; //must be private
         public int speed;
         public bool moving;
 

@@ -10,6 +10,7 @@ namespace SignalRWebPack.Characters
 {
     public class FriendlyNpc : NPC
     {
+        public FriendlyNpc() { }
         public FriendlyNpc(
             string name = null, 
             float health = 0, 

@@ -9,7 +9,7 @@ using SignalRWebPack.Network;
 
 namespace SunkiojiDalisTests.Hubs.Tests
 {
-    public class NetworkManagerMock : NetworkManager
+    public class NetworkManagerStub : NetworkManager
     {
         public override void AddNewObjectToAllClients(NetworkObject networkObject)
         {

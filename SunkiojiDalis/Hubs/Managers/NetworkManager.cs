@@ -340,9 +340,10 @@ namespace SignalRWebPack.Network
             NetworkManager.AddRequestToAllClients(new NetworkRequest(guid, method, dataJson));
         }
 
-        public virtual void SyncDataWithGroup(string groupId, string method, string dataJson)
+        public virtual bool SyncDataWithGroup(string groupId, string method, string dataJson)
         {
             NetworkManager.AddRequestToGroup(groupId, new NetworkRequest(guid, method, dataJson));
+            return true;
         }
 
         public virtual void SyncDataWithClient(string clientId, string method, string dataJson)

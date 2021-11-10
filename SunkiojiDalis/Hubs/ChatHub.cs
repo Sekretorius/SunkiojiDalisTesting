@@ -82,7 +82,6 @@ namespace SignalRWebPack.Hubs
 
         public void Notify()
         {
-            throw new NotImplementedException();
         }
     }
 
