@@ -21,7 +21,21 @@ namespace SunkiojiDalisTests.Hubs.Tests
         [Test]
         public void FriendlyNpcConstructorTest()
         {
+            FriendlyNpc friendlyNpc = new FriendlyNpc("name", 100, "sprite", "area", new Vector2D(10, 10), 100, 25, 10, 10, 5, true);
+            Assert.AreNotEqual(friendlyNpc, null);
 
+            Assert.AreEqual(friendlyNpc.name, "name");
+            Assert.AreEqual(friendlyNpc.health, 100);
+            Assert.AreEqual(friendlyNpc.sprite, "sprite");
+            Assert.AreEqual(friendlyNpc.AreaId, "area");
+            Assert.AreEqual(friendlyNpc.Position.X, 10);
+            Assert.AreEqual(friendlyNpc.Position.Y, 10);
+            Assert.AreEqual(friendlyNpc.width, 100);
+            Assert.AreEqual(friendlyNpc.height, 25);
+            Assert.AreEqual(friendlyNpc.frameX, 10);
+            Assert.AreEqual(friendlyNpc.frameY, 10);
+            Assert.AreEqual(friendlyNpc.speed, 5);
+            Assert.AreEqual(friendlyNpc.moving, true);
         }
 
 

@@ -45,7 +45,7 @@ public class Vector2D
 
     public override bool Equals(object obj)
     {
-        return base.Equals(obj);
+        return this == (Vector2D)obj;
     }
 
     public override int GetHashCode()

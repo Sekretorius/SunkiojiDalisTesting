@@ -10,7 +10,7 @@ public class QuadTree
     private QuadTree TopRight;
     private QuadTree BottomLeft;
     private QuadTree BottomRight;
-    private List<ColliderPoint> points = new List<ColliderPoint>();
+    public List<ColliderPoint> points = new List<ColliderPoint>();
 
     public QuadTree(Rect boundry, int maxCapacity)
     {
