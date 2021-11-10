@@ -88,7 +88,7 @@ namespace Tests
         }
 
         [TestCase(0, 10, 0, 1, ExpectedResult = false)]
-        [TestCase(0, 10, 0, 10, ExpectedResult = false)]
+        [TestCase(0, 10, 0, 10, ExpectedResult = true)]
         public bool EqualsTest(float x, float y, float nx, float ny)
         {
             Vector2D vector1 = new(x, y);
