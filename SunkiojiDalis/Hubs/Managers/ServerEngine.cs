@@ -190,7 +190,7 @@ namespace SignalRWebPack.Engine
         void Destroy();
     }
 
-    public abstract class ServerObject : IObject
+    public class ServerObject : IObject
     {
         private Vector2D position;
         protected string guid = string.Empty;

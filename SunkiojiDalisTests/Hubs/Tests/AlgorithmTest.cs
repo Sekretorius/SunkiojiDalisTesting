@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace SunkiojiDalisTests.Hubs.Tests
 {
+    [TestFixture]
     class AlgorithmTest
     {
         [Test]
@@ -58,8 +59,8 @@ namespace SunkiojiDalisTests.Hubs.Tests
             AttackAlgorithm algorithmMixed = new Mixed("melee", 10);
             Assert.AreNotEqual(algorithmMixed, null);
 
-            float delayMixed = algorithmMelee.Attack(new Vector2D(10, 10), new Vector2D(15, 15));
-            Assert.AreEqual(delayMelee, 10);
+            float delayMixed = algorithmMixed.Attack(new Vector2D(10, 10), new Vector2D(15, 15));
+            Assert.AreEqual(delayMixed, 10);
         }
 
         [Test]
@@ -129,6 +130,30 @@ namespace SunkiojiDalisTests.Hubs.Tests
             MoveAlgorithm algorithmMixedMoveShallow = algorithmMixedMove.ShallowCopy();
 
             Assert.AreNotEqual(algorithmMixedMoveShallow.GetHashCode(), algorithmMixedMove.GetHashCode());
+        }
+
+        [Test]
+        public void DeepCopyTest()
+        {
+            MoveAlgorithm walk = new Walk();
+            MoveAlgorithm walkCopy = walk.DeepCopy();
+
+            Assert.IsTrue(walk.GetHashCode() != walkCopy.GetHashCode());
+
+            MoveAlgorithm fly = new Fly();
+            MoveAlgorithm flyCopy = fly.DeepCopy();
+
+            Assert.IsTrue(fly.GetHashCode() != flyCopy.GetHashCode());
+
+            MoveAlgorithm stand = new Stand();
+            MoveAlgorithm standCopy = stand.DeepCopy();
+
+            Assert.IsTrue(stand.GetHashCode() != standCopy.GetHashCode());
+
+            MoveAlgorithm mixedMove = new MixedMove(5);
+            MoveAlgorithm mixedMoveCopy = mixedMove.DeepCopy();
+
+            Assert.IsTrue(mixedMove.GetHashCode() != mixedMoveCopy.GetHashCode());
         }
     }
 }

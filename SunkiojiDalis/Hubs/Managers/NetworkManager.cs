@@ -297,7 +297,7 @@ namespace SignalRWebPack.Network
 	}
 
 
-    public abstract class NetworkObject : INetworkObject
+    public class NetworkObject : INetworkObject
     {
         [JsonIgnore] private Vector2D position;
         [JsonIgnore] public string AreaId {get; set;}

@@ -103,6 +103,51 @@ namespace Tests
             Vector2D vector2D = new(0, 0);
             Assert.IsTrue(vector2D.GetHashCode() != 0);
         }
+
+
+        [Test]
+        public void OperatorEqualsTest()
+        {
+            Vector2D v1 = null;
+            Vector2D v2 = null;
+            Vector2D v3 = new Vector2D(0, 1);
+
+            Assert.IsTrue(v1 == v2);
+            Assert.IsFalse(v1 == v3);
+            Assert.IsFalse(v3 == v1);
+
+        }
+
+        [Test]
+        public void OperatorNotEqualsTest()
+        {
+            Vector2D v1 = null;
+            Vector2D v2 = null;
+            Vector2D v3 = new Vector2D(0, 1);
+
+            Assert.IsFalse(v1 != v2);
+            Assert.IsTrue(v1 != v3);
+            Assert.IsTrue(v3 != v1);
+
+        }
+
+        [Test]
+        public void OperatorMultiplyTest()
+        {
+            Vector2D v = new Vector2D(0, 1);
+            Vector2D expected = new Vector2D(0, 5);
+
+            Assert.IsTrue(v * 5 == expected);
+        }
+
+        [Test]
+        public void OperatorDivideTest()
+        {
+            Vector2D v = new Vector2D(0, 25);
+            Vector2D expected = new Vector2D(0, 5);
+
+            Assert.IsTrue(v / 5 == expected);
+        }
     }
 }
 

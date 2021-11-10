@@ -83,6 +83,7 @@ namespace Tests
         [TestCase(0, 0, 5, 5, 3, 0, 5, 5, 2)]
         [TestCase(0, 0, 5, 5, 3, 2, 5, 5, 1)]
         [TestCase(0, 0, 5, 5, 10, 10, 5, 5, 0)]
+        [TestCase(0, 0, 5, 5, 1000, 1000, 4, 5, 0)]
         public void QueryTest(int px1, int py1, int sx1, int sy1, int px2, int py2, int sx2, int sy2, int exR)
         {
             QuadTree quadTree = new QuadTree(new Rect(new Vector2D(0, 0), new Vector2D(50, 50)), 4);
@@ -97,6 +98,7 @@ namespace Tests
             List<ColliderPoint> colliderPoints = quadTree.Query(boundry2);
 
             Assert.IsTrue(colliderPoints.Count == exR);
+            Assert.IsTrue(colliderPoints.Count == 0 || colliderPoints[0].Collider != null);
         }
     }
 }

@@ -18,6 +18,15 @@ namespace SunkiojiDalisTests.Hubs.Tests
     [TestFixture]
     class NpcTest
     {
+        [SetUp]
+        public static void SetupEngine()
+        {
+            ServerEngine ServerEngine = new ServerEngine();
+            ServerEngine.SetInstance(ServerEngine);
+            ServerEngine.SetNetworkManager(new NetworkManagerMock());
+            ServerEngine.Initialize();
+        }
+
         [Test]
         public void FriendlyNpcConstructorTest()
         {
@@ -134,6 +143,23 @@ namespace SunkiojiDalisTests.Hubs.Tests
         }
 
         [Test]
+        public void AnimalNpcUpdateTest()
+        {
+            SetupEngine();
+            AnimalNpc animalNpc = new AnimalNpc("name", 100, "sprite", "area", new Vector2D(10, 10), 100, 25, 10, 10, 5, true);
+
+            animalNpc.SetMoveAlgorithm(new Walk());
+
+            ServerEngine.Instance.UpdateTime = 10;
+
+            animalNpc.targets = new List<Vector2D>() { new Vector2D(20, 20) };
+            animalNpc.Update();
+
+            Assert.AreNotEqual(animalNpc.Position.X, 10);
+            Assert.AreNotEqual(animalNpc.Position.Y, 10);
+        }
+
+        [Test]
         public void NpcUpdateDestroy()
         {
 
@@ -197,7 +223,7 @@ namespace SunkiojiDalisTests.Hubs.Tests
         }
 
         [Test]
-        public void NpcClientSideCreation()
+        public void FriendlyNpcClientSideCreation()
         {
             FriendlyNpc npc = new FriendlyNpc("name", 100, "sprite", "area", new Vector2D(10, 10), 100, 25, 10, 10, 5, true);
 
@@ -206,16 +232,25 @@ namespace SunkiojiDalisTests.Hubs.Tests
             Assert.AreNotEqual(data, null);
         }
 
-        public static Mock<ServerEngine> SetupEngine()
+        [Test]
+        public void EnemyNpcClientSideCreation()
         {
-            Mock<ServerEngine> ServerEngineMock = new Mock<ServerEngine>();
+            EnemyNpc npc = new EnemyNpc("name", 100, "sprite", "area", new Vector2D(10, 10), 100, 25, 10, 10, 5, true);
 
-            ServerEngineMock.Object.SetInstance(ServerEngineMock.Object);
-            ServerEngineMock.Object.SetNetworkManager(new NetworkManagerMock());
+            Dictionary<string, string> data = npc.OnClientSideCreation();
 
-            ServerEngineMock.Object.Initialize();
-
-            return ServerEngineMock;
+            Assert.AreNotEqual(data, null);
         }
+
+        [Test]
+        public void AnimalNpcClientSideCreation()
+        {
+            AnimalNpc animalNpc = new AnimalNpc("name", 100, "sprite", "area", new Vector2D(10, 10), 100, 25, 10, 10, 5, true);
+
+            Dictionary<string, string> data = animalNpc.OnClientSideCreation();
+
+            Assert.AreNotEqual(data, null);
+        }
+
     }
 }

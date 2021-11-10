@@ -54,12 +54,14 @@ namespace SignalRWebPack.Characters
             }
             this.Position = this.moveAlgorithm.Move(this.Position, targets[c], speed);
             SyncDataWithGroup(AreaId, "SyncPosition", $"{{\"x\":\"{this.Position.X}\", \"y\":\"{this.Position.Y}\"}}");
-
-            TryAttack();
+            Shout();
+            Move();
+            Attack();
         }
 
         private void TryAttack()
         {
+            Die();
             if(this.attackAlgorithm != null && attackDelayTimmer >= attackDelay)
             {
                 attackDelay = this.attackAlgorithm.Attack(this.Position, new Vector2D(1, 0));
@@ -70,7 +72,7 @@ namespace SignalRWebPack.Characters
 
         public override void Shout(){}
         public override void Move(){}
-        public override void Attack(){}
+        public override void Attack() { TryAttack(); }
         public override void Die(){}
         public override Dictionary<string, string> OnClientSideCreation()
         {

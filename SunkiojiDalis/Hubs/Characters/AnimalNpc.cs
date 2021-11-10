@@ -24,7 +24,7 @@ namespace SignalRWebPack.Characters
             int speed = 0,
             bool moving = false) : base(name, health, sprite, areaId, position, width, height, frameX, frameY, speed, moving){ this.collider = new Collider(new Rect(position, new Vector2D(width, height)), this); }
 
-        private List<Vector2D> targets;
+        public List<Vector2D> targets;
         public override void Init()
         {
             base.Init();
@@ -41,19 +41,27 @@ namespace SignalRWebPack.Characters
         int c = 0;
         public override void Update()
         {
-            if(this.moveAlgorithm == null) return;
-            if(targets[c] == Position)
-            {
-                c++;
-                if(c >= targets.Count){
-                    c = 0;   
-                }
-            }
-            this.Position = this.moveAlgorithm.Move(this.Position, targets[c], speed);
+            Shout();
+            Move();
+            Attack();
             SyncDataWithGroup(AreaId, "SyncPosition", $"{{\"x\":\"{this.Position.X}\", \"y\":\"{this.Position.Y}\"}}");
+
         }
         public override void Shout(){}
-        public override void Move(){}
+        public override void Move()
+        {
+            if (this.moveAlgorithm == null) return;
+            if (targets[c] == Position)
+            {
+                c++;
+                if (c >= targets.Count)
+                {
+                    c = 0;
+                }
+            }
+            Die();
+            this.Position = this.moveAlgorithm.Move(this.Position, targets[c], speed);
+        }
         public override void Attack(){}
         public override void Die(){}
         public override Dictionary<string, string> OnClientSideCreation()

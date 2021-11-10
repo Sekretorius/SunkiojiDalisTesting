@@ -10,6 +10,7 @@ namespace SignalRWebPack.Characters
     public class Mixed : AttackAlgorithm
     {
         private string areaId;
+        private int value = -1;
         public Mixed(string areaId, float damage) : base(damage)
         {
             this.areaId = areaId;
@@ -17,7 +18,7 @@ namespace SignalRWebPack.Characters
         public override float Attack(Vector2D attacker, Vector2D target)
         {
             Random random = new Random();
-            int value = random.Next(0, 2);
+            if (++value == 2) value = 0;
             switch(value)
             {
                 case 0:

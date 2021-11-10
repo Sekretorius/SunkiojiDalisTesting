@@ -40,6 +40,10 @@ namespace SignalRWebPack.Characters
         int c = 0;
         public override void Update()
         {
+            Shout();
+            Move();
+            Attack();
+            Die();
             if(this.moveAlgorithm == null) return;
             if(targets[c] == Position)
             {

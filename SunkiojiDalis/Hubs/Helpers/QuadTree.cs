@@ -46,11 +46,9 @@ public class QuadTree
 
             if(TopLeft.Insert(colliderPoint)) return true;
             if(TopRight.Insert(colliderPoint)) return true;
-            if(BottomLeft.Insert(colliderPoint)) return true;
-            if(BottomRight.Insert(colliderPoint)) return true;
+            if (BottomLeft.Insert(colliderPoint)) return true;
+            else { BottomRight.Insert(colliderPoint); } return true;
         }
-
-        return false;
     }
 
     public List<ColliderPoint> Query(Rect rectangle)
