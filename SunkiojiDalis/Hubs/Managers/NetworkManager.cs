@@ -28,6 +28,10 @@ namespace SignalRWebPack.Network
 
         private List<NetworkRequest> clientsRequestQueue = new List<NetworkRequest>();
 
+        private int totalGroupRequestCount = 0;
+        private int totalsingleClientRequestCount = 0;
+        private int totalallClientsRequestCount = 0;
+
         public NetworkManager() : base()
         {
 
@@ -84,8 +88,10 @@ namespace SignalRWebPack.Network
                 }
             }
 
+            GetTotalRequestDataCount();
+
             //proccess client requests
-            if(clientsRequestQueue.Count != 0)
+            if (clientsRequestQueue.Count != 0)
             {
                 lock(ClientRequestProccessLock)
                 {
@@ -206,6 +212,28 @@ namespace SignalRWebPack.Network
             string requestData = JsonConvert.SerializeObject(requests);
             await GameHub.Clients.Client(clientId).SendAsync(ClientRequestHandlerMethod, requestData);
         }
+
+        public virtual void GetGroupRequestDataCount()
+        {
+            foreach(string guid in clientGroupRequestQueue.Keys)
+            {
+                totalGroupRequestCount += clientGroupRequestQueue[guid].Count;
+            }
+        }
+        public virtual void GetSingleClientRequestDataCount()
+        {
+            foreach (string guid in singleClientRequestQueue.Keys)
+            {
+                totalsingleClientRequestCount += clientGroupRequestQueue[guid].Count;
+            }
+        }
+        public virtual void GetTotalRequestDataCount()
+        {
+            GetGroupRequestDataCount();
+            GetSingleClientRequestDataCount();
+            totalallClientsRequestCount = totalGroupRequestCount + totalsingleClientRequestCount;
+        }
+
 
         public void HandleClientRequest(string incommingData)
         {
